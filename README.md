@@ -28,7 +28,7 @@ There's no need for a further installation of the submodules.
 Create and activate a conda environment:
 
 ```
-  conda create --name MNBAB python=3.7 -y
+  conda create --name MNBAB python=3.8 -y
   conda activate MNBAB
   ```
 
@@ -47,7 +47,53 @@ PYTHONPATH=$PYTHONPATH:$PWD
 Download the full MNIST, CIFAR10, and TinyImageNet test datasets in the right format and copy them into the `test_data` directory:  
 [MNIST](https://files.sri.inf.ethz.ch/sabr/mnist_test_full.csv)  
 [CIFAR10](https://files.sri.inf.ethz.ch/sabr/cifar10_test_full.csv)  
-[TinyImageNet](https://files.sri.inf.ethz.ch/sabr/tin_val.csv)  
+[TinyImageNet](https://files.sri.inf.ethz.ch/sabr/tin_val.csv) 
+
+### Containers
+We provide Container Definitions for Docker and Apptainer (formerly Singularity), which is more often found on HPC Clusters as it does not require root privileges.
+
+#### Docker
+1. Refer to https://docs.docker.com/engine/install/ for installation of Docker.
+2. Make sure the docker service is running
+  ```
+  sudo su
+  systemctl start docker
+  ```
+3. Build the Docker Image with Example Tag `mn-bab-docker`
+```
+docker build -t mn-bab-docker -f ./containers/Dockerfile .
+```
+
+For an interactive shell inside of the Docker Container, execute:
+```
+docker run -it --gpus all mn-bab-docker /bin/sh
+```
+Or directly start the verification using:
+```
+docker run --gpus all mn-bab-docker python3 src/verify.py -c configs/baseline/mnist_conv_big.json
+```
+#### Apptainer
+1. Refer to https://apptainer.org/docs/admin/main/installation.html for the installation of Apptainer.
+2. Build the Apptainer `.sif` image.
+```
+apptainer build ./mn_bab.sif ./apptainer.def
+```
+3. Create Apptainer Overlay to make container filesystem writable
+```
+mkdir ./apptainer_overlay
+```
+Now, you can run a shell inside the container with GPU Support and using the previously created overlay using:
+
+```
+apptainer shell --nv --overlay ./apptainer_overlay mn_bab.sif
+```
+The MN-BaB files can be found under `/app/`
+
+Additionally, you can start verification directly by running, e.g., 
+
+```
+apptainer exec --overlay ./apptainer_overlay --nv ./mn_bab.sif python3 /app/mn-bab/src/verify.py -c /app/mn-bab/configs/baseline/mnist_conv_big.json
+```
 
 ### Example usage
 
