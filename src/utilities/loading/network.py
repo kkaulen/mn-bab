@@ -808,7 +808,6 @@ def load_net(  # noqa: C901
     if "state_dict" in state_dict.keys():
         state_dict = state_dict["state_dict"]
     original_network.load_state_dict(state_dict)
-    original_network = original_network.blocks
     freeze_network(original_network)
 
     return original_network

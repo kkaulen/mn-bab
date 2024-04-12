@@ -76,7 +76,7 @@ docker run --gpus all mn-bab-docker python3 src/verify.py -c configs/baseline/mn
 1. Refer to https://apptainer.org/docs/admin/main/installation.html for the installation of Apptainer.
 2. Build the Apptainer `.sif` image.
 ```
-apptainer build ./mn_bab.sif ./apptainer.def
+apptainer build ./mn_bab.sif ./containers/apptainer.def
 ```
 3. Create Apptainer Overlay to make container filesystem writable
 ```
