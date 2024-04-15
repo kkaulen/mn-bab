@@ -54,23 +54,20 @@ We provide Container Definitions for Docker and Apptainer (formerly Singularity)
 
 #### Docker
 1. Refer to https://docs.docker.com/engine/install/ for installation of Docker.
-2. Make sure the docker service is running
+2. Make sure you have installed the CUDA Toolkit and a corresponding NVIDIA driver with CUDA >= 12.4 (https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html) as well as the nvidia-container-toolkit (https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
+3. Make sure the docker service is running
   ```
   sudo su
   systemctl start docker
   ```
-3. Build the Docker Image with Example Tag `mn-bab-docker`
+4. Build the Docker Image with Example Tag `mn-bab-docker`
 ```
 docker build -t mn-bab-docker -f ./containers/Dockerfile .
 ```
 
 For an interactive shell inside of the Docker Container, execute:
 ```
-docker run -it --gpus all mn-bab-docker /bin/sh
-```
-Or directly start the verification using:
-```
-docker run --gpus all mn-bab-docker python3 src/verify.py -c configs/baseline/mnist_conv_big.json
+docker run -it --gpus all mn-bab-docker /bin/bash
 ```
 #### Apptainer
 1. Refer to https://apptainer.org/docs/admin/main/installation.html for the installation of Apptainer.
